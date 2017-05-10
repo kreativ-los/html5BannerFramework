@@ -3,12 +3,19 @@ HTML5 Advertising Banner Framework
 
 A framework for HTML5 advertising banners.
 
-This framework uses gulp-inject to inject CSS and JS directly into the html file.
+This framework uses __gulp-inject__ to inject CSS and JS directly into the html file.
+Images are compressed with __gulp-imagemin__ and __pngquant__.
+
+Requirements
+------------
+
+This framework requires node.js to work. I recommend installing it using [Node Version Manager (nvm)](https://github.com/creationix/nvm).
+
 
 Installation
 ------------
 
-1. Update node. Used version v7.1.0.
+1. Update node. Used version v7.1.0. Or simply type `$ nvm use`. This will use the node version defined in *.nvmrc*.
 2. Install gulp 4. `$ npm install -g gulp-cli`.
 3. Use `$ npm install` or if your using yarn simply type `$ yarn` to install node dependencies.
 
