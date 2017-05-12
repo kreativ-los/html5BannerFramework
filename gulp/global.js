@@ -14,10 +14,10 @@ function getDirectories(srcpath) {
 * Copy global files.
 */
 gulp.task('copy:global', function() {
-  let stream = gulp.src(config.rootFiles.source);
-  let directories = getDirectories(config.rootFiles.dest);
+  let stream = gulp.src(config.globalFiles.source);
+  let directories = getDirectories(config.globalFiles.dest);
   for (let i = 0; i < directories.length; i++) {
-    stream.pipe(gulp.dest(path.join(config.rootFiles.dest, directories[i])));
+    stream.pipe(gulp.dest(path.join(config.globalFiles.dest, directories[i])));
   }
 
   return stream;
