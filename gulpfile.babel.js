@@ -21,7 +21,7 @@ gulp.task('build:html', function() {
       inject(es.merge(scripts, styles), {
         starttag: '<!-- inject:{{ext}} -->',
         transform: function(filePath, file, i, len, target) {
-          if (file.dirname.split(path.sep).pop() === target.stem) {
+          if (!config.multyBanner || file.dirname.split(path.sep).pop() === target.stem) {
             // return file contents as string
             return file.contents.toString('utf8');
           }
@@ -30,7 +30,7 @@ gulp.task('build:html', function() {
       })
     )
     .pipe(gulp.dest((file) => {
-      return path.join(config.html.dest, file.stem);
+      return config.multyBanner ? path.join(config.html.dest, file.stem) : config.html.dest;
     }));
 });
 

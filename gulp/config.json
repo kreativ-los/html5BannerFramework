@@ -1,4 +1,5 @@
 {
+  "multyBanner": true,
   "html": {
     "source": "./source/*.html",
     "dest": "./build/"
