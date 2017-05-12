@@ -15,4 +15,5 @@ gulp.task('copy:images', function() {
       quality: '60-70',
     })]))
     .pipe(gulp.dest(config.images.dest));
+    // .pipe(gulp.dest(function(file) { return path.join(config.images.dest, file.dirname.split(path.sep).pop()); }));
 });
