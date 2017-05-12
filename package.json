@@ -1,7 +1,7 @@
 {
-  "name": "html5-banner",
+  "name": "single-site",
   "version": "1.0.0",
-  "description": "HTML5 Advertising Banner Framework",
+  "description": "Single Site Framework",
   "scripts": {
     "build": "gulp build",
     "watch": "gulp watch"
@@ -11,6 +11,7 @@
     "babel-core": "^6.24.0",
     "babel-preset-es2015": "^6.24.0",
     "event-stream": "^3.3.4",
+    "file-exists": "^2.0.0",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-autoprefixer": "^3.1.1",
     "gulp-clean-css": "^3.2.0",
@@ -33,8 +34,6 @@
     }
   },
   "dependencies": {
-    "fs": "^0.0.1-security",
-    "gulp-cli": "^1.2.2",
-    "path": "^0.12.7"
+    "gulp-cli": "^1.2.2"
   }
 }

@@ -1,5 +1,4 @@
 {
-  "multyBanner": true,
   "html": {
     "source": "./source/*.html",
     "dest": "./build/"
@@ -9,11 +8,11 @@
     "dest": "./build/"
   },
   "css": {
-    "source": "./source/assets/sass/**/*.scss",
+    "source": "./source/assets/sass/*.scss",
     "dest": "./build/"
   },
   "images": {
-    "source": "./source/assets/img/**/*.*",
+    "source": "./source/assets/img/*.*",
     "dest": "./build/"
   },
   "rootFiles": {
