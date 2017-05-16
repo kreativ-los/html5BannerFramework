@@ -1,22 +1,18 @@
 'use strict';
 
-import config from './gulp/config.json';
+import config from './_gulp/config.json';
 
 import gulp from 'gulp';
 import inject from 'gulp-inject';
 import es from 'event-stream';
 import path from 'path';
-import fs from 'fs';
 import folderSize from 'get-folder-size';
+import {getDirectories} from './_gulp/helpers';
 
-import {scripts} from './gulp/scripts';
-import {styles} from './gulp/styles';
-import './gulp/images';
-import './gulp/global';
-
-function getDirectories(srcpath) {
-  return fs.readdirSync(srcpath).filter(file => fs.lstatSync(path.join(srcpath, file)).isDirectory());
-}
+import {scripts} from './_gulp/scripts';
+import {styles} from './_gulp/styles';
+import './_gulp/images';
+import './_gulp/global';
 
 /**
 * Build html files.
@@ -40,6 +36,10 @@ gulp.task('build:html', function() {
     }));
 });
 
+/**
+ * Print size of builded banners.
+ * @param  {Function} done Callback function.
+ */
 function printBuildSize(done) {
   let buildPath = './build/';
   let directories = getDirectories(buildPath);
@@ -54,7 +54,11 @@ function printBuildSize(done) {
   done();
 }
 
-
+/**
+ * Watch task.
+ * @param  {Function} done Callback function.
+ * @TODO Currently not working. Fix this.
+ */
 function watch(done) {
   gulp.watch(config.html.source).on('change', gulp.series('build:html'));
   gulp.watch(config.css.source).on('change', gulp.series('build:html'));

@@ -3,12 +3,8 @@
 import config from './config.json';
 
 import gulp from 'gulp';
-import fs from 'fs';
 import path from 'path';
-
-function getDirectories(srcpath) {
-  return fs.readdirSync(srcpath).filter(file => fs.lstatSync(path.join(srcpath, file)).isDirectory());
-}
+import {getDirectories} from './helpers';
 
 /**
 * Copy global files.
