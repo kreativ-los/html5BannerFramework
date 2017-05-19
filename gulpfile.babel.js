@@ -7,6 +7,8 @@ import inject from 'gulp-inject';
 import es from 'event-stream';
 import path from 'path';
 import folderSize from 'get-folder-size';
+import rename from 'gulp-rename';
+import open from 'gulp-open';
 import {getDirectories} from './_gulp/helpers';
 
 import {scripts} from './_gulp/scripts';
@@ -31,14 +33,27 @@ gulp.task('build:html', function() {
         removeTags: true,
       })
     )
-    .pipe(gulp.dest((file) => {
-      return config.multiBanner ? path.join(config.html.dest, file.stem) : config.html.dest;
-    }));
+    .pipe(rename(function(file) {
+      if (config.multiBanner) {
+        file.dirname = path.join(file.dirname, file.basename);
+        file.basename = 'index';
+      }
+    }))
+    .pipe(gulp.dest(config.html.dest));
+});
+
+/**
+ * Open builded banners.
+ */
+gulp.task('open', function() {
+  return gulp.src('./build/**/*.html')
+    .pipe(open());
 });
 
 /**
  * Print size of builded banners.
  * @param  {Function} done Callback function.
+ * @TODO Print size on disk.
  */
 function printBuildSize(done) {
   let buildPath = './build/';
@@ -57,7 +72,7 @@ function printBuildSize(done) {
 /**
  * Watch task.
  * @param  {Function} done Callback function.
- * @TODO Currently not working. Fix this.
+ * @FIXME Currently not working. Fix this.
  */
 function watch(done) {
   gulp.watch(config.html.source).on('change', gulp.series('build:html'));
