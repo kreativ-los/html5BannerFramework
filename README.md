@@ -24,3 +24,12 @@ Tasks
 
 1. `$ gulp build` Builds the project.
 2. `$ gulp watch` Builds the project and watches for changes.
+
+License
+-------
+Copyright (c) 2017 Thorben Ziegler <contact@thorbenziegler.de>
+
+"THE BEER-WARE LICENSE" (Revision 42):
+<contact@thorbenziegler.de> wrote this framework. As long as you retain this notice you
+can do whatever you want with this stuff. If we meet some day, and you think
+this stuff is worth it, you can buy me a beer in return.
