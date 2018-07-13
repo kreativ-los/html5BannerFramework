@@ -19,5 +19,6 @@
   "globalFiles": {
     "source": "./source/global/*.*",
     "dest": "./build/"
-  }
+  },
+  "vendor": "default"
 }

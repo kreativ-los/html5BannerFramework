@@ -1,8 +1,10 @@
 // @import 'normalize.css/normalize';
 
-@import 'variables';
-
-
 *, *::before, *::after { // sass-lint:disable-line single-line-per-selector, force-pseudo-nesting
   box-sizing: border-box;
+}
+
+body {
+  height: $banner--height;
+  width: $banner--width;
 }

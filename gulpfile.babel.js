@@ -1,6 +1,7 @@
 'use strict';
 
 import config from './_gulp/config.json';
+import vendors from './source/_conf/vendors.json';
 
 import gulp from 'gulp';
 import inject from 'gulp-inject';
@@ -9,18 +10,24 @@ import path from 'path';
 import folderSize from 'get-folder-size';
 import rename from 'gulp-rename';
 import open from 'gulp-open';
+import replace from 'gulp-replace';
 import {getDirectories} from './_gulp/helpers';
 
-import {scripts} from './_gulp/scripts';
-import {styles} from './_gulp/styles';
+import scripts from './_gulp/scripts';
+import styles from './_gulp/styles';
 import './_gulp/images';
 import './_gulp/global';
+
+function getClicktag() {
+  return vendors[config.vendor].clicktag.html;
+}
 
 /**
 * Build html files.
 */
 gulp.task('build:html', function() {
   return gulp.src(config.html.source)
+    .pipe(replace('<!-- clicktag -->', getClicktag()))
     .pipe(
       inject(es.merge(scripts, styles), {
         starttag: '<!-- inject:{{ext}} -->',
@@ -43,7 +50,7 @@ gulp.task('build:html', function() {
 });
 
 /**
- * Open builded banners.
+ * Open build banners.
  */
 gulp.task('open', function() {
   return gulp.src('./build/**/*.html')
@@ -51,7 +58,7 @@ gulp.task('open', function() {
 });
 
 /**
- * Print size of builded banners.
+ * Print size of build banners.
  * @param  {Function} done Callback function.
  * @TODO Print size on disk.
  */

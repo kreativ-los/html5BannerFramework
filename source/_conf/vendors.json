@@ -1,0 +1,64 @@
+{
+  "default" : {
+    "clicktag": {
+      "html": "<a href=\"#clicktag\" id=\"clicktag\" target=\"_blank\">",
+      "js": "./vendors/default/vendor.js"
+    },
+    "sizes": {
+      "billboard": {
+        "width": 800,
+        "height": 250
+      },
+      "half_page_ad": {
+        "width": 300,
+        "height": 600
+      },
+      "medium_rectangle": {
+        "width": 300,
+        "height": 250
+      },
+      "skyscraper": {
+        "width": 160,
+        "height": 600
+      },
+      "superbanner": {
+        "width": 728,
+        "height": 90
+      }
+    }
+  },
+  "gdn": {
+    "clicktag": {
+      "html": "<a href=\"javascript:window.open(window.clickTag)\">",
+      "js": "./vendors/gdn/vendor.js"
+    },
+    "meta": [
+      {
+        "name": "ad.size",
+        "content": "width=750,height=300"
+      }
+    ],
+    "sizes": {
+      "billboard": {
+        "width": 750,
+        "height": 300
+      },
+      "half_page_ad": {
+        "width": 300,
+        "height": 600
+      },
+      "medium_rectangle": {
+        "width": 300,
+        "height": 250
+      },
+      "skyscraper": {
+        "width": 160,
+        "height": 600
+      },
+      "superbanner": {
+        "width": 728,
+        "height": 90
+      }
+    }
+  }
+}
