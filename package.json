@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "HTML5 Advertising Banner Framework",
   "scripts": {
+    "start": "gulp watch",
     "build": "gulp build",
     "watch": "gulp watch"
   },
@@ -28,8 +29,7 @@
     "imagemin-pngquant": "^5.0.0",
     "jspm": "^0.16.48",
     "normalize.css": "^5.0.0",
-    "through2": "^2.0.3",
-    "through2-sync": "^0.2.2"
+    "through2": "^2.0.3"
   },
   "jspm": {
     "dependencies": {},

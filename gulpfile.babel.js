@@ -86,8 +86,7 @@ function watch(done) {
   gulp.watch(config.css.source).on('change', gulp.series('build:html'));
   gulp.watch(config.js.source).on('change', gulp.series('build:html'));
   gulp.watch(config.images.source).on('change', gulp.series('copy:images'));
-  gulp.watch(config.rootFiles.source).on('change', gulp.series('copy:global'));
-  done();
+  gulp.watch(config.globalFiles.source).on('change', gulp.series('copy:global'));
 }
 
 /**
