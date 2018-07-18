@@ -10,11 +10,15 @@ import autoprefixer from 'gulp-autoprefixer';
 import cleanCSS from 'gulp-clean-css';
 import through2 from 'through2';
 
-function buildVarString(fileName) {
+function getBannerType(file) {
+  return path.basename(path.dirname(file.path));
+}
+
+function buildVarString(fileName, vendor) {
   let variables = {};
-  variables.vendor = config.vendor;
-  variables['banner--width'] = vendors[config.vendor].sizes[fileName].width + 'px';
-  variables['banner--height'] = vendors[config.vendor].sizes[fileName].height + 'px';
+  variables.vendor = vendor;
+  variables['banner--width'] = vendors[vendor].sizes[fileName].width + 'px';
+  variables['banner--height'] = vendors[vendor].sizes[fileName].height + 'px';
 
   let varString = '';
   for (let variable in variables) {
@@ -24,10 +28,10 @@ function buildVarString(fileName) {
   return varString;
 }
 
-function injectSassVars() {
+function injectSassVars(vendor) {
   return through2.obj(function(file, enc, done) {
-    const fileName = path.basename(path.dirname(file.path));
-    const variablesBuffer = new Buffer(buildVarString(fileName), file);
+    const fileName = getBannerType(file);
+    const variablesBuffer = new Buffer(buildVarString(fileName, vendor), file);
     file.contents = Buffer.concat([variablesBuffer, file.contents], variablesBuffer.length + file.contents.length);
     this.push(file);
     done();
@@ -37,13 +41,15 @@ function injectSassVars() {
 /**
 * Build stylesheets.
 */
-export default gulp.src(config.css.source)
-  .pipe(injectSassVars())
-  .pipe(sass(
-    {
-      includePaths: ['./node_modules'],
-      noCache: true,
-    }
-  ))
-  .pipe(cleanCSS({compatibility: 'ie8'}))
-  .pipe(autoprefixer());
+export default function(vendor) {
+  return gulp.src(config.css.source)
+    .pipe(injectSassVars(vendor))
+    .pipe(sass(
+      {
+        includePaths: ['./node_modules'],
+        noCache: true,
+      }
+    ))
+    .pipe(cleanCSS({compatibility: 'ie8'}))
+    .pipe(autoprefixer());
+}

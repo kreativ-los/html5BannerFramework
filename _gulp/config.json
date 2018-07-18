@@ -1,5 +1,6 @@
 {
   "multiBanner": true,
+  "title": "Title",
   "html": {
     "source": "./source/*.html",
     "dest": "./build/"
@@ -19,6 +20,5 @@
   "globalFiles": {
     "source": "./source/global/*.*",
     "dest": "./build/"
-  },
-  "vendor": "default"
+  }
 }

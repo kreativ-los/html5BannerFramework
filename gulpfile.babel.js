@@ -11,42 +11,72 @@ import folderSize from 'get-folder-size';
 import rename from 'gulp-rename';
 import open from 'gulp-open';
 import replace from 'gulp-replace';
-import {getDirectories} from './_gulp/helpers';
+import {getDirectories, getBannerType} from './_gulp/helpers';
 
 import scripts from './_gulp/scripts';
 import styles from './_gulp/styles';
 import './_gulp/images';
 import './_gulp/global';
 
-function getClicktag() {
-  return vendors[config.vendor].clicktag.html;
+function getClicktag(vendor) {
+  return vendors[vendor].clicktag.html;
+}
+
+function getMeta(vendor) {
+  const meta = vendors[vendor].meta;
+  if (!meta) return '';
+
+  let result = '';
+
+  for (let i = 0; i < meta.length; i++) {
+    result += `<meta name="${meta[i].name}" content="${meta[i].content}">\n`;
+  }
+
+  return result;
+}
+
+function replaceBannerSpecificContent(file, vendor, p1) {
+  if (p1 === 'title') return config.title;
+
+  return vendors[vendor].sizes[getBannerType(file)][p1];
 }
 
 /**
 * Build html files.
 */
-gulp.task('build:html', function() {
-  return gulp.src(config.html.source)
-    .pipe(replace('<!-- clicktag -->', getClicktag()))
-    .pipe(
-      inject(es.merge(scripts, styles), {
-        starttag: '<!-- inject:{{ext}} -->',
-        transform: function(filePath, file, i, len, target) {
-          if (!config.multiBanner || file.dirname.split(path.sep).pop() === target.stem) {
-            // return file contents as string
-            return file.contents.toString('utf8');
-          }
-        },
-        removeTags: true,
-      })
-    )
-    .pipe(rename(function(file) {
-      if (config.multiBanner) {
-        file.dirname = path.join(file.dirname, file.basename);
-        file.basename = 'index';
-      }
-    }))
-    .pipe(gulp.dest(config.html.dest));
+gulp.task('build:html', function(done) {
+  let tasks = [];
+  for (let vendor in vendors) {
+    tasks.push(gulp.src(config.html.source)
+      .pipe(replace('<!-- vendor:meta -->', getMeta(vendor)))
+      .pipe(replace('<!-- vendor:clicktag -->', getClicktag(vendor)))
+      .pipe(replace(/<!-- banner:(.*?) -->/g, function(match, p1) {
+        return replaceBannerSpecificContent(this.file, vendor, p1);
+      }))
+      .pipe(
+        inject(es.merge(scripts.call(this, vendor), styles.call(this, vendor)), {
+          starttag: '<!-- inject:{{ext}} -->',
+          transform: function(filePath, file, i, len, target) {
+            if (!config.multiBanner || path.basename(path.dirname(file.path)) === target.stem) {
+              // return file contents as string
+              return file.contents.toString('utf8');
+            }
+          },
+          removeTags: true,
+        })
+      )
+      .pipe(rename(function(file) {
+        if (config.multiBanner) {
+          file.dirname = path.join(file.dirname, file.basename);
+          file.basename = 'index';
+        }
+      }))
+      .pipe(gulp.dest(path.resolve(config.html.dest, vendor))));
+  }
+
+  let stream = es.merge(...tasks);
+  stream.on('end', done);
+  return stream;
 });
 
 /**
@@ -64,16 +94,37 @@ gulp.task('open', function() {
  */
 function printBuildSize(done) {
   let buildPath = './build/';
-  let directories = getDirectories(buildPath);
-  for (let i = 0; i < directories.length; i++) {
-    folderSize(path.join(buildPath, directories[i]), function(err, size) {
-      if (err) { throw err; }
+  let foldersLeft = 0;
 
-      console.log(directories[i].replace(/\b\w/g, function(l) { return l.toUpperCase(); }) + ': ' + (size / 1024).toFixed(2) + ' kb');
-    });
+  for (let vendor in vendors) {
+    let vendorBuildPath = path.join(buildPath, vendor);
+    let directories = getDirectories(vendorBuildPath);
+    let printVendor = true;
+
+
+    for (let i = 0; i < directories.length; i++) {
+      foldersLeft++;
+      folderSize(path.join(vendorBuildPath, directories[i]), function(err, size) {
+        if (err) { throw err; }
+
+        if (printVendor) {
+          console.log('');
+          console.log(vendor.toUpperCase() + ':');
+          console.log('----------');
+          printVendor = false;
+        }
+
+        console.log(directories[i].replace(/\b\w/g, function(l) { return l.toUpperCase(); }) + ': ' + (size / 1024).toFixed(2) + ' kb');
+
+        foldersLeft--;
+
+        if (foldersLeft === 0) {
+          console.log('');
+          done();
+        }
+      });
+    }
   }
-
-  done();
 }
 
 /**
@@ -87,6 +138,8 @@ function watch(done) {
   gulp.watch(config.js.source).on('change', gulp.series('build:html'));
   gulp.watch(config.images.source).on('change', gulp.series('copy:images'));
   gulp.watch(config.globalFiles.source).on('change', gulp.series('copy:global'));
+
+  done();
 }
 
 /**

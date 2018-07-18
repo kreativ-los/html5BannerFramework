@@ -11,6 +11,8 @@ import path from 'path';
 /**
 * Build scripts.
 */
-export default gulp.src(config.js.source)
-  .pipe(prepend(path.resolve('source/_conf', vendors[config.vendor].clicktag.js)))
-  .pipe(uglify());
+export default function(vendor) {
+  return gulp.src(config.js.source)
+    .pipe(prepend(path.resolve('source/_conf', vendors[vendor].clicktag.js)))
+    .pipe(uglify());
+}

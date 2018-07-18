@@ -1,6 +1,7 @@
 'use strict';
 
 import config from './config.json';
+import vendors from '../source/_conf/vendors.json';
 
 import gulp from 'gulp';
 import path from 'path';
@@ -11,9 +12,14 @@ import {getDirectories} from './helpers';
 */
 gulp.task('copy:global', function() {
   let stream = gulp.src(config.globalFiles.source);
-  let directories = getDirectories(config.globalFiles.dest);
-  for (let i = 0; i < directories.length; i++) {
-    stream.pipe(gulp.dest(path.join(config.globalFiles.dest, directories[i])));
+
+  for (let vendor in vendors) {
+    let vendorPath = path.join(config.globalFiles.dest, vendor);
+
+    let directories = getDirectories(vendorPath);
+    for (let i = 0; i < directories.length; i++) {
+      stream = stream.pipe(gulp.dest(path.join(vendorPath, directories[i])));
+    }
   }
 
   return stream;

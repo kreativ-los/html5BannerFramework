@@ -35,7 +35,7 @@
     "meta": [
       {
         "name": "ad.size",
-        "content": "width=750,height=300"
+        "content": "width=<!-- banner:width -->,height=<!-- banner:width -->"
       }
     ],
     "sizes": {
