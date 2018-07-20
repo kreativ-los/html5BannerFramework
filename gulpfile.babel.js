@@ -7,10 +7,12 @@ import gulp from 'gulp';
 import inject from 'gulp-inject';
 import es from 'event-stream';
 import path from 'path';
+import fs from 'fs';
 import folderSize from 'get-folder-size';
 import rename from 'gulp-rename';
 import open from 'gulp-open';
 import replace from 'gulp-replace';
+import archiver from 'archiver';
 import {getDirectories, getBannerType} from './_gulp/helpers';
 
 import scripts from './_gulp/scripts';
@@ -50,12 +52,14 @@ gulp.task('build:html', function(done) {
     tasks.push(gulp.src(config.html.source)
       .pipe(replace('<!-- vendor:meta -->', getMeta(vendor)))
       .pipe(replace('<!-- vendor:clicktag -->', getClicktag(vendor)))
+      .pipe(replace('<!-- clicktag:end -->', '</a>'))
       .pipe(replace(/<!-- banner:(.*?) -->/g, function(match, p1) {
         return replaceBannerSpecificContent(this.file, vendor, p1);
       }))
       .pipe(
         inject(es.merge(scripts.call(this, vendor), styles.call(this, vendor)), {
-          starttag: '<!-- inject:{{ext}} -->',
+          starttag: '/* inject:{{ext}} */',
+          endtag: '/* endinject */',
           transform: function(filePath, file, i, len, target) {
             if (!config.multiBanner || path.basename(path.dirname(file.path)) === target.stem) {
               // return file contents as string
@@ -78,6 +82,58 @@ gulp.task('build:html', function(done) {
   stream.on('end', done);
   return stream;
 });
+
+function zip(vendor, banner) {
+  return new Promise(function(resolve, reject) {
+    let dir = path.resolve('./zip', vendor);
+
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+
+    let output = fs.createWriteStream(path.join(dir, banner + '.zip'));
+    let archive = archiver('zip', {
+      zlib: {level: 9},
+    });
+
+    archive.pipe(output);
+    archive.directory(path.join('./build', vendor, banner), '');
+
+    output.on('close', () => {
+      resolve();
+    });
+
+    archive.on('error', function(err) {
+      reject(err);
+    });
+
+    archive.finalize();
+  });
+}
+
+/**
+ * Zip banners.
+ */
+gulp.task('zip', function(done) {
+  let zipTasks = [];
+  const zipDir = path.resolve('./zip');
+
+  if (!fs.existsSync(zipDir)) fs.mkdirSync(zipDir);
+
+  for (let vendor in vendors) {
+    const basePath = path.join('./build', vendor);
+    let banners = getDirectories(basePath);
+
+    for (let banner of banners) {
+      zipTasks.push(zip(vendor, banner));
+    }
+  }
+
+  Promise.all(zipTasks).then(() => {
+    done();
+  }, (err) => {
+    throw err;
+  });
+});
+
 
 /**
  * Open build banners.
@@ -130,7 +186,6 @@ function printBuildSize(done) {
 /**
  * Watch task.
  * @param  {Function} done Callback function.
- * @FIXME Currently not working. Fix this.
  */
 function watch(done) {
   gulp.watch(config.html.source).on('change', gulp.series('build:html'));

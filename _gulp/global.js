@@ -18,6 +18,8 @@ gulp.task('copy:global', function() {
 
     let directories = getDirectories(vendorPath);
     for (let i = 0; i < directories.length; i++) {
+      const bannerType = directories[i].split('--')[0];
+      if (vendors[vendor].sizes[bannerType].noGlobal) continue;
       stream = stream.pipe(gulp.dest(path.join(vendorPath, directories[i])));
     }
   }

@@ -11,7 +11,7 @@ import cleanCSS from 'gulp-clean-css';
 import through2 from 'through2';
 
 function getBannerType(file) {
-  return path.basename(path.dirname(file.path));
+  return path.basename(path.dirname(file.path)).split('--')[0];
 }
 
 function buildVarString(fileName, vendor) {
@@ -22,7 +22,7 @@ function buildVarString(fileName, vendor) {
 
   let varString = '';
   for (let variable in variables) {
-    varString += `$${variable}: ${JSON.stringify(variables[variable])};\n`;
+    varString += `$${variable}: ${variables[variable]};\n`;
   }
 
   return varString;

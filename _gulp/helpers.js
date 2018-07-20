@@ -10,7 +10,6 @@ export function getDirectories(srcpath) {
   return fs.readdirSync(srcpath).filter(file => fs.lstatSync(path.join(srcpath, file)).isDirectory());
 }
 
-
 export function getBannerType(file) {
-  return path.basename(file.path, path.extname(file.path));
+  return path.basename(file.path, path.extname(file.path)).split('--')[0];
 }

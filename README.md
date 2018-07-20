@@ -15,19 +15,19 @@ This framework requires node.js to work. I recommend installing it using [Node V
 Installation
 ------------
 
-1. Update node. Used version v7.1.0. Or simply type `$ nvm use`. This will use the node version defined in *.nvmrc*.
-2. Install gulp 4. `$ npm install -g gulp-cli`.
-3. Use `$ npm install` or if your using yarn simply type `$ yarn` to install node dependencies.
+1. Update node. Used version v8.9.4. Or simply type `$ nvm use`. This will use the node version defined in *.nvmrc*.
+2. Use `$ npm i` to install node dependencies.
 
 Tasks
 -----
 
-1. `$ gulp build` Builds the project.
-2. `$ gulp watch` Builds the project and watches for changes.
+1. `$ npm run build` Builds the project.
+2. `$ npm run watch` or `$ npm start` Builds the project and watches for changes.
+3. `$ npm run open` Opens all banners in browser.
 
 License
 -------
-Copyright (c) 2017 Thorben Ziegler <contact@thorbenziegler.de>
+Copyright (c) 2018 Thorben Ziegler <contact@thorbenziegler.de>
 
 "THE BEER-WARE LICENSE" (Revision 42):
 <contact@thorbenziegler.de> wrote this framework. As long as you retain this notice you

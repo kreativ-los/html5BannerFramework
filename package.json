@@ -5,10 +5,13 @@
   "scripts": {
     "start": "gulp watch",
     "build": "gulp build",
-    "watch": "gulp watch"
+    "watch": "gulp watch",
+    "open": "gulp open",
+    "zip": "gulp zip"
   },
   "author": "Thorben Ziegler <thorben.ziegler@hmmh.de>",
   "devDependencies": {
+    "archiver": "^2.1.1",
     "babel-core": "^6.24.0",
     "babel-preset-env": "^1.7.0",
     "event-stream": "^3.3.4",
@@ -26,6 +29,7 @@
     "gulp-sass": "^4.0.1",
     "gulp-sass-variables": "^1.2.0",
     "gulp-uglify": "^2.1.0",
+    "imagemin-mozjpeg": "^7.0.0",
     "imagemin-pngquant": "^5.0.0",
     "jspm": "^0.16.48",
     "normalize.css": "^5.0.0",

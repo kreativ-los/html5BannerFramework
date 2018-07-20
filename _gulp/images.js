@@ -6,6 +6,7 @@ import vendors from '../source/_conf/vendors.json';
 import gulp from 'gulp';
 import imagemin from 'gulp-imagemin';
 import pngquant from 'imagemin-pngquant';
+import mozJpeg from 'imagemin-mozjpeg';
 import path from 'path';
 
 /**
@@ -13,9 +14,14 @@ import path from 'path';
 */
 gulp.task('copy:images', function() {
   let stream = gulp.src(config.images.source)
-    .pipe(imagemin([pngquant({
-      quality: '60-70',
-    })]));
+    .pipe(imagemin([
+      pngquant({
+        quality: '60-70',
+      }),
+      mozJpeg({
+        quality: 90,
+      }),
+    ]));
 
   for (let vendor in vendors) {
     stream = stream.pipe(gulp.dest(path.resolve(config.images.dest, vendor)));
